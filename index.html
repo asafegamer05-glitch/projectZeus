@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Zeus - 1v1 Arena</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Menu Principal -->
+    <div id="menu-screen" class="overlay-screen">
+        <h1>PROJECT ZEUS</h1>
+        <p>Arena 1v1 - Combate Estratégico com Física</p>
+        <div class="menu-config-area">
+            <div class="menu-col" id="menu-main-col">
+                <h3>🎒 Hotbar Inicial</h3>
+                <p style="font-size: 11px; color: #aaa;">Configure clicando nos slots</p>
+                <div id="menu-hotbar-grid" class="mc-grid" style="margin-top: 5px;"></div>
+                
+                <div style="margin-top: 15px;">
+                    <button class="btn-small" onclick="window.toggleMenuControls()">🎮 Ver Controles</button>
+                </div>
+
+                <div style="margin-top: 15px;">
+                    <label style="color: #bdc3c7; margin-right: 5px; font-size: 16px;">Dificuldade:</label>
+                    <select id="diff-select" style="padding: 4px 8px; font-size: 14px; background: #34495e; color: #fff; border-radius: 5px; border: 2px solid #2c3e50; cursor: pointer;">
+                        <option value="dummy">🎯 Dummy</option>
+                        <option value="easy">Fácil</option>
+                        <option value="normal" selected>Normal</option>
+                        <option value="hard">Difícil</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Coluna de Controles (Escondida por padrão) -->
+            <div class="menu-col" id="menu-controls-col" style="display: none;">
+                <h3>🎮 Guia de Controles</h3>
+                <div id="menu-controls-list" class="menu-info-box" style="max-height: 200px; overflow-y: auto;"></div>
+                <button class="btn-small" onclick="window.toggleMenuControls()" style="margin-top: 10px;">Voltar</button>
+            </div>
+        </div>
+        <button class="btn" onclick="startGame()" style="margin-top: 10px; padding: 10px 40px; font-size: 20px;">JOGAR</button>
+    </div>
+
+    <!-- Tela de Fim de Jogo -->
+    <div id="game-over-screen" class="overlay-screen" style="display: none;">
+        <h1 id="end-title">FIM DE JOGO</h1>
+        <button class="btn" onclick="restartGame()">Lutar Novamente</button>
+    </div>
+
+    <!-- Tela de Inventário (Minecraft-Style) -->
+    <div id="inventory-screen" class="overlay-screen" style="display: none;">
+        <div class="mc-inv-modal">
+            <div class="mc-inv-title">Inventário</div>
+
+            <div class="mc-inv-top">
+                <!-- Armor Slots (Esquerda) -->
+                <div class="mc-armor-col">
+                    <div class="mc-slot mc-armor-slot" id="armor-helmet" onclick="window.equipArmor('helmet')" title="Capacete"></div>
+                    <div class="mc-slot mc-armor-slot" id="armor-chestplate" onclick="window.equipArmor('chestplate')" title="Peitoral"></div>
+                    <div class="mc-slot mc-armor-slot" id="armor-leggings" onclick="window.equipArmor('leggings')" title="Calças"></div>
+                    <div class="mc-slot mc-armor-slot" id="armor-boots" onclick="window.equipArmor('boots')" title="Botas"></div>
+                </div>
+
+                <!-- Offhand Slot (Centro) -->
+                <div class="mc-offhand-area">
+                    <div class="mc-slot mc-offhand-slot" id="offhand-slot" onclick="window.equipOffhand()" title="Offhand (Totem)"></div>
+                    <div class="mc-offhand-label">Offhand</div>
+                </div>
+
+                <!-- Totem Counter -->
+                <div class="mc-totem-info" id="totem-info"></div>
+            </div>
+
+            <!-- Inventário Principal (27 slots: 3 linhas x 9 colunas) -->
+            <div class="mc-inv-label">Inventário</div>
+            <div class="mc-grid" id="mc-inv-grid"></div>
+
+            <!-- Hotbar (9 slots) -->
+            <div class="mc-inv-label">Hotbar (Atalhos)</div>
+            <div class="mc-grid mc-hotbar-grid" id="mc-hotbar-grid"></div>
+        </div>
+    </div>
+
+    <!-- Container do Jogo -->
+    <div id="game-wrapper">
+        <canvas id="gameCanvas" width="800" height="600"></canvas>
+        <div id="ui-layer">
+            <button id="menu-btn" onclick="goToMenu()">🏠 Menu</button>
+            
+            <div class="top-ui">
+                <!-- Barra de Vida -->
+                <div class="hud-bar-container">
+                    <div id="health-bar-fill" class="hud-bar-fill"></div>
+                    <div id="health-text" class="hud-bar-text">60 / 60</div>
+                </div>
+                <!-- Barra de Absorção Separada -->
+                <div id="absorb-bar-container" class="hud-bar-container absorb-container" style="height: 14px; margin-top: 5px; opacity: 0; transition: opacity 0.3s;">
+                    <div id="absorb-bar-fill" class="hud-bar-fill absorb-fill"></div>
+                </div>
+            </div>
+            <div id="shield-charges" style="position: absolute; top: 60px; left: 50%; transform: translateX(-50%); display: flex; gap: 8px;"></div>
+
+            <div class="apple-container" id="apple-container">
+                <div class="apple-text">Canalizando...</div>
+                <div class="apple-bar-bg">
+                    <div id="apple-bar-fill" class="apple-bar-fill"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts (A ordem é importante para as variáveis globais) -->
+    <script src="globals.js"></script>
+    <script src="entities.js"></script>
+    <script src="main.js"></script>
+
+</body>
+</html>
